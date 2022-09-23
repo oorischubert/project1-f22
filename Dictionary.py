@@ -1,7 +1,7 @@
 # Your names:
-#
-#
-#
+# Oori Schubert
+# Wesley Gilpin
+# 
 #
 
 # no other modules allowed
@@ -11,13 +11,27 @@ import random,time,sys
 
 
 class Dictionary:
+    def __init__(self,newDict):
+        self.__name = newDict
+        self.__words = dict #.split('\n')
+        self.__size = len(self.__words)
+        self.index=0
+        self.steps=0
+        self.rand = random.seed(8) 
+        try: 
+            self.__words = open(newDict, "r")
+        except:
+            print("File " + newDict + ".txt does not exist!")
+            sys.exit(0)
 
 
 
     #### To complete
+    def get_name(self):
+        return self.__name
 
-
-
+    def get_size(self):
+        return self.__size
     
     def selection_sort(self):    #provided to you
         """Perfom selection sort, must return the time it takes to sort the list of words
