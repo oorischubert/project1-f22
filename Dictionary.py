@@ -13,16 +13,16 @@ import random,time,sys
 class Dictionary:
     def __init__(self,newDict):
         self.__name = newDict
-        self.__words = dict #.split('\n')
+        try: 
+            file = open(newDict, "r")
+        except:
+            print("File " + newDict + " does not exist!")
+            sys.exit(0)
+        self.__words = list(file)
         self.__size = len(self.__words)
         self.index=0
         self.steps=0
         self.rand = random.seed(8) 
-        try: 
-            self.__words = open(newDict, "r")
-        except:
-            print("File " + newDict + ".txt does not exist!")
-            sys.exit(0)
 
 
 
@@ -33,6 +33,53 @@ class Dictionary:
     def get_size(self):
         return self.__size
     
+    def insert(self,word):
+        """Insert a word into the dictionary"""
+        self.__words.append(word)
+        self.__size += 1
+    
+    def display(self):
+        """Display the dictionary"""
+        print(self.__words)
+    
+    def shuffle(self):
+        for i in range(self.__size):
+            j = random.randint(0,self.__size-1)
+            temp = self.__words[i]
+            self.__words[i] = self.__words[j]
+            self.__words[j] = temp
+    
+    def lsearch(self,word):
+        """Linear search for word in the dictionary"""
+        self.steps = 0
+        for i in range(self.__size):
+            self.steps += 1
+            if self.__words[i] == word:
+                return True
+        return False
+
+    def bsearch(self,word):
+        """Binary search for word in the dictionary"""
+        self.steps = 0
+        low = 0
+        high = self.__size-1
+        while low <= high:
+            self.steps += 1
+            mid = (low + high) // 2
+            if self.__words[mid] == word:
+                return True
+            elif self.__words[mid] < word:
+                low = mid + 1
+            else:
+                high = mid - 1
+        return False
+
+
+    def get_random_list(self,length):
+        """Return a list of random words from the dictionary"""
+        #return random.sample(self.__words, 20)
+        return random.sample(self.__words, length)
+
     def selection_sort(self):    #provided to you
         """Perfom selection sort, must return the time it takes to sort the list of words
         Remark: Routine works 'in-place'"""
