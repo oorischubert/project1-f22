@@ -7,11 +7,10 @@ import random,time,sys
 
 
 class Dictionary:
-    def __init__(self,newDict):
+    def __init__(self,newDict='N/A'):
         self.__name = newDict
-        self.__words = []
-        if newDict == None:
-            self.__name = 'N/A'
+        if newDict == 'N/A':
+            self.__words = []
         else: 
             try: 
                 file = open(newDict, "r")
@@ -27,9 +26,11 @@ class Dictionary:
 
     #### To complete
     def get_name(self):
+        """Return the name of the dictionary"""
         return self.__name
 
     def get_size(self):
+        """Return the size of the dictionary"""
         return self.__size
     
     def insert(self,word):
@@ -42,12 +43,18 @@ class Dictionary:
         print(self.__words)
     
     def shuffle(self):
+        """Shuffle the list of words"""
         for i in range(self.__size):
             j = random.randint(0,self.__size-1)
             temp = self.__words[i]
             self.__words[i] = self.__words[j]
             self.__words[j] = temp
-    
+
+    def get_index(self):
+        """Return the index of the current word"""
+        return self.index
+        
+
     def lsearch(self,word):
         """Linear search for word in the dictionary"""
         self.steps = 0
