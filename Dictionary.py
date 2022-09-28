@@ -1,29 +1,28 @@
 # Your names:
 # Oori Schubert
 # Wesley Gilpin
-# 
-#
 
 # no other modules allowed
 import random,time,sys
 
 
-
-
 class Dictionary:
     def __init__(self,newDict):
         self.__name = newDict
-        try: 
-            file = open(newDict, "r")
-        except:
-            print("File " + newDict + " does not exist!")
-            sys.exit(0)
-        self.__words = list(file)
+        self.__words = []
+        if newDict == None:
+            self.__name = 'N/A'
+        else: 
+            try: 
+                file = open(newDict, "r")
+                self.__words = list(file)
+            except:
+                print("File " + newDict + " does not exist!")
+                sys.exit(0)
         self.__size = len(self.__words)
         self.index=0
         self.steps=0
         self.rand = random.seed(8) 
-
 
 
     #### To complete
@@ -115,7 +114,7 @@ class Dictionary:
     @staticmethod
     def sort_word(word):  # to complete
         """ must return a string with letters included in 'word' that are now sorted"""
-        pass # to remove
+        return ''.join(sorted(word)) #Work on this!
 
 
 
