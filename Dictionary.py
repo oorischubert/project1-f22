@@ -44,12 +44,15 @@ class Dictionary:
             print(word,end='')
     
     def shuffle(self):
+        t1 = time.process_time()
         """Shuffle the list of words"""
         for i in range(self.__size):
             j = random.randint(0,self.__size-1)
             temp = self.__words[i]
             self.__words[i] = self.__words[j]
             self.__words[j] = temp
+        t2 = time.process_time()
+        return t2-t1
 
     def get_index(self):
         """Return the index of the current word"""
@@ -128,6 +131,45 @@ class Dictionary:
         """ must return a string with letters included in 'word' that are now sorted"""
         return ''.join(sorted(word)) #Work on this!
 
+    def insertion_sort(self):
+        """Sort the items list in place."""
+        t1 = time.process_time() #capture time
+        n = self.__size
+        for out in range(1,n): #outer loop
+            temp=self.__words[out] #save the value to be inserted
+            i=out
+            while i>0 and temp<self.__words[i-1]: #move items to the right
+                self.__words[i]=self.__words[i-1] 
+                i-=1
+            self.__words[i]=temp #insert temp
+        t2 = time.process_time() #capture time
+        return t2-t1
+    
+    def enhanced_insertion_sort(self):
+        """Sort the items list in place."""
+        t1 = time.process_time()
+        n = self.__size
+        for out in range(1,n): #outer loop
+            temp=self.__words[out] #save the value to be inserted
+            i=out
+            while i>0 and temp<self.__words[i-1]: #move items to the right
+                low = 0
+                high = i-1
+                while low <= high:
+                    mid = (low + high)//2
+                    if temp < self.__words[mid]:
+                        self.__words.insert(mid,temp)
+                    elif temp > self.__words[mid]:
+                        low = mid
+        t2 = time.process_time()
+        return t2-t1
+        
+    def save(self,name):
+        """Save the dictionary to a file"""
+        file = open(name, "w")
+        for word in self.__words:
+            file.write(word)
+        file.close()
 
 
 
