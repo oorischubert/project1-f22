@@ -40,7 +40,8 @@ class Dictionary:
     
     def display(self):
         """Display the dictionary"""
-        print(self.__words)
+        for word in self.__words:
+            print(word,end='')
     
     def shuffle(self):
         """Shuffle the list of words"""
@@ -57,20 +58,24 @@ class Dictionary:
 
     def lsearch(self,word):
         """Linear search for word in the dictionary"""
+        self.index = 0
         self.steps = 0
         for i in range(self.__size):
             self.steps += 1
             if self.__words[i] == word:
                 return True
+        self.index = -1
         return False
 
     def bsearch(self,word):
         """Binary search for word in the dictionary"""
         self.steps = 0
+        self.index = 0
         low = 0
         high = self.__size-1
         while low <= high:
             self.steps += 1
+            self.index = self.steps-1
             mid = (low + high) // 2
             if self.__words[mid] == word:
                 return True
