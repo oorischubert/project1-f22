@@ -57,7 +57,10 @@ class Dictionary:
     def get_index(self):
         """Return the index of the current word"""
         return self.index
-        
+    
+    def get_steps(self):
+        """Return the number of steps taken by the last search"""
+        return self.steps
 
     def lsearch(self,word):
         """Linear search for word in the dictionary"""
@@ -166,12 +169,29 @@ class Dictionary:
         
     def save(self,name):
         """Save the dictionary to a file"""
-        file = open(name, "w")
+        try:
+            file = open(name, "w")
+        except:
+            print("File " + name + " does not exist!")
+            sys.exit(0)
         for word in self.__words:
             file.write(word)
         file.close()
 
-
+    def spell_check(self,filename):
+        """Check the spelling of a text file"""
+        try:
+            file = open(filename, "r")
+        except:
+            print("File " + filename + " does not exist!")
+            sys.exit(0)
+        for line in file:
+            for word in line.split():
+                if self.bsearch(word) == False:
+                    print("(",word,")",end=' ')
+                else:
+                    print(word,end=' ')
+        file.close()
 
 
     
