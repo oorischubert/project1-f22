@@ -4,6 +4,7 @@
 
 # no other modules allowed
 import random,time,sys
+import string #used for spell check
 
 
 class Dictionary:
@@ -14,14 +15,15 @@ class Dictionary:
         else: 
             try: 
                 file = open(newDict, "r")
-                self.__words = list(file)
+                self.__words = file.read().split()
             except:
                 print("File " + newDict + " does not exist!")
                 sys.exit(0)
         self.__size = len(self.__words)
         self.index=0
         self.steps=0
-        self.rand = random.seed(8) 
+        self.rand = random.seed(8)
+        self.__scoreList = [] #for scrabble game
 
 
     #### To complete
@@ -38,11 +40,15 @@ class Dictionary:
         self.__words.append(word)
         self.__size += 1
     
-    def display(self):
+    def display(self,score=False):
         """Display the dictionary"""
-        for word in self.__words:
-            print(word,end='')
-    
+        for i in range(len(self.__words)):
+            if score:
+                num = self.__scoreList[i]
+            else:
+                num = ''
+            print(self.__words[i],str(num))
+        
     def shuffle(self):
         t1 = time.process_time()
         """Shuffle the list of words"""
@@ -66,11 +72,20 @@ class Dictionary:
         """Linear search for word in the dictionary"""
         self.index = 0
         self.steps = 0
+        print(self.__size)
         for i in range(self.__size):
             self.steps += 1
-            if self.__words[i] == word:
+            if self.__words[i].lower() == word.lower():
                 return True
         self.index = -1
+        return False
+
+    @staticmethod
+    def searchList(word,list):
+        """Search for a word in a list"""
+        for i in range(len(list)):
+            if list[i] == word:
+                return True
         return False
 
     def bsearch(self,word):
@@ -83,7 +98,7 @@ class Dictionary:
             self.steps += 1
             self.index = self.steps-1
             mid = (low + high) // 2
-            if self.__words[mid] == word:
+            if self.__words[mid].lower() == word.lower():
                 return True
             elif self.__words[mid] < word:
                 low = mid + 1
@@ -115,8 +130,6 @@ class Dictionary:
         t2 = time.process_time() #capture time
         return t2-t1
         
-
-
     
     @staticmethod  # provided to you
     def get_word_combination(word, combs=['']):
@@ -131,9 +144,18 @@ class Dictionary:
 
     @staticmethod
     def sort_word(word):  # to complete
-        """ must return a string with letters included in 'word' that are now sorted"""
-        return ''.join(sorted(word)) #Work on this!
-
+        n=len(word)
+        wordList = list(word)
+        for out in range(n-1):
+            imin=out
+            for i in range(out+1,n):
+                if wordList[i]<wordList[imin]:
+                    imin=i
+            temp=wordList[imin]
+            wordList[imin]=wordList[out]
+            wordList[out]=temp
+        return "".join(wordList)
+        
     def insertion_sort(self):
         """Sort the items list in place."""
         t1 = time.process_time() #capture time
@@ -180,6 +202,7 @@ class Dictionary:
 
     def spell_check(self,filename):
         """Check the spelling of a text file"""
+        punc=string.punctuation
         try:
             file = open(filename, "r")
         except:
@@ -187,12 +210,63 @@ class Dictionary:
             sys.exit(0)
         for line in file:
             for word in line.split():
-                if self.bsearch(word) == False:
-                    print("(",word,")",end=' ')
+                cleanWord = word.lower().strip(punc)
+                if not self.bsearch(cleanWord):
+                    print("(" + word + ")",end=' ')
                 else:
                     print(word,end=' ')
         file.close()
-
+    
+    def anagram(self,word):
+        """Return a list of anagrams for a word"""
+        anagrams = []
+        for w in self.__words:
+            if len(w) == len(word):
+                if (self.sort_word(w.lower()) == self.sort_word(word.lower())) and (w.lower() != word.lower()) and (not self.searchList(w.lower(),anagrams)):
+                    anagrams.append(w.lower())
+        return anagrams
+    
+    def compute_score_scrabble(self):
+        """Compute the scrabble score for a word"""
+        oneP = ["e","a","i","n","r","t","l","s","u"]
+        twoP = ["d","g"]
+        threeP = ["b","c","m","p"]
+        fourP = ["f","h","v","w","y"]
+        fiveP = ["k"]
+        eightP = ["j","x"]
+        tenP = ["q","z"]
+        for word in self.__words:
+            score = 0
+            for letter in list(word):
+                if Dictionary.searchList(letter,oneP):
+                    score += 1
+                elif Dictionary.searchList(letter,twoP):
+                    score += 2
+                elif Dictionary.searchList(letter,threeP):
+                    score += 3
+                elif Dictionary.searchList(letter,fourP):
+                    score += 4
+                elif Dictionary.searchList(letter,fiveP):
+                    score += 5
+                elif Dictionary.searchList(letter,eightP):
+                    score += 8
+                elif Dictionary.searchList(letter,tenP):
+                    score += 10
+            self.__scoreList.append(score)
+    
+    def score_sort(self):
+        for out in range(self.__size):
+            imin=out
+            for i in range(out+1,self.__size):
+                if self.__scoreList[i]<self.__scoreList[imin]:
+                    imin=i
+            temp=self.__scoreList[imin]
+            self.__scoreList[imin]=self.__scoreList[out]
+            self.__scoreList[out]=temp
+            #repeat for words!
+            temp1=self.__words[imin]
+            self.__words[imin]=self.__words[out]
+            self.__words[out]=temp1
 
     
 
@@ -214,6 +288,12 @@ def main():
     rlist=dict1.get_random_list(5) # 5 means the number of random words we want
     for w in rlist: print(w,end=" ")
     print("\n")
+
+    print("test...")
+    if dict1.lsearch("scooped"):
+        print("scooped is in the dictionary")
+    else:
+        print("scooped is not in the dictionary")
 
     ### step-3 test constructor again
     dict2=Dictionary()
