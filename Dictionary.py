@@ -222,7 +222,7 @@ class Dictionary:
         anagrams = []
         for w in self.__words:
             if len(w) == len(word):
-                if (self.sort_word(w.lower()) == self.sort_word(word.lower())) and (not self.searchList(w.lower(),anagrams)): # and (w.lower() != word.lower())
+                if (self.sort_word(w) == self.sort_word(word)) and (not self.searchList(w,anagrams)): # and (w.lower() != word.lower())
                     anagrams.append(w.lower())
         return anagrams
     
