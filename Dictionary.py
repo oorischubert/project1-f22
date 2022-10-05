@@ -183,7 +183,7 @@ class Dictionary:
                 while low <= high:
                     mid = (low + high)//2
                     if temp < self.__words[mid]:
-                        self.__words.insert(mid,temp)
+                        self.__words.insert(mid,temp) #fix this shit
                     elif temp > self.__words[mid]:
                         low = mid
         t2 = time.process_time()
@@ -222,7 +222,7 @@ class Dictionary:
         anagrams = []
         for w in self.__words:
             if len(w) == len(word):
-                if (self.sort_word(w.lower()) == self.sort_word(word.lower())) and (w.lower() != word.lower()) and (not self.searchList(w.lower(),anagrams)):
+                if (self.sort_word(w.lower()) == self.sort_word(word.lower())) and (not self.searchList(w.lower(),anagrams)): # and (w.lower() != word.lower())
                     anagrams.append(w.lower())
         return anagrams
     
