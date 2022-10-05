@@ -268,6 +268,22 @@ class Dictionary:
             self.__words[imin]=self.__words[out]
             self.__words[out]=temp1
 
+    #How to proceed? Implement the method crack lock that returns a new dictionary containing all the possible words. In theory, we will need to consider to consider c = (nboption)nbletter locking combination options, search them in the sorted dictionary, and return all the words found. Since it can be quite complicated to generate all these locking combinations (without using recursion), you will be using instead a stochastic approach where your code will generate 6 ∗ c random locking combinations of letters (for example: 1st letter chosen at random among all its possible options, etc.). This technique may not be able to find all the acceptable words at the end but it generally works well if the number of random locking combinations is large enough. In addition, as soon as a word is found (after a successful binary search) you will insert it into a new dictionary *only* if it is not already present (to avoid duplicates if you get the same random locking combination). Hint: you may want to use the linear search method lsearch to search the new dictionary (which
+    def crack_lock(self,lock):
+        """Crack a lock"""
+        newDict = Dictionary()
+        for i in range(6):
+            newWord = ""
+            for j in range(len(lock)):
+                newWord += lock[j][random.randint(0,len(lock[j])-1)]
+            print(newWord)
+            if self.bsearch(newWord):
+                if not newDict.lsearch(newWord):
+                    newDict.insert(newWord)
+        return newDict
+        
+
+
     
 
     
