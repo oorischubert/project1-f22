@@ -144,6 +144,7 @@ class Dictionary:
 
     @staticmethod
     def sort_word(word):  # to complete
+        """Return a sorted version of the inputted word"""
         n=len(word)
         wordList = list(word)
         for out in range(n-1):
@@ -172,6 +173,7 @@ class Dictionary:
     
     #insertion using binary search
     def enhanced_insertion_sort(self):
+        """Sorts the words using binary search"""
         t1 = time.process_time()
         n = self.__size
         for out in range(1,n):
@@ -256,6 +258,7 @@ class Dictionary:
             self.__scoreList.append(score)
     
     def score_sort(self):
+        """Sort the words by their scrabble score"""
         for out in range(self.__size):
             imin=out
             for i in range(out+1,self.__size):
@@ -270,7 +273,7 @@ class Dictionary:
             self.__words[out]=temp1
 
     def crack_lock(self,lock):
-        """Crack a lock"""
+        """Cracking lock"""
         newDict = Dictionary()
         for i in range(6*(len(lock[0])**len(lock))):
             newWord = ""
