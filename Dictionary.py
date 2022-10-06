@@ -4,6 +4,7 @@
 
 # no other modules allowed
 import random,time,sys
+from this import d
 import string #used for spell check
 
 
@@ -72,7 +73,6 @@ class Dictionary:
         """Linear search for word in the dictionary"""
         self.index = 0
         self.steps = 0
-        print(self.__size)
         for i in range(self.__size):
             self.steps += 1
             if self.__words[i].lower() == word.lower():
@@ -170,22 +170,23 @@ class Dictionary:
         t2 = time.process_time() #capture time
         return t2-t1
     
+    #insertion using binary search
     def enhanced_insertion_sort(self):
-        """Sort the items list in place."""
         t1 = time.process_time()
         n = self.__size
-        for out in range(1,n): #outer loop
-            temp=self.__words[out] #save the value to be inserted
-            i=out
-            while i>0 and temp<self.__words[i-1]: #move items to the right
-                low = 0
-                high = i-1
-                while low <= high:
-                    mid = (low + high)//2
-                    if temp < self.__words[mid]:
-                        self.__words.insert(mid,temp) #fix this shit
-                    elif temp > self.__words[mid]:
-                        low = mid
+        for out in range(1,n):
+            temp=self.__words[out]
+            low = 0
+            high = out-1
+            while low <= high:
+                mid = (low + high) // 2
+                if self.__words[mid] < temp:
+                    low = mid + 1
+                else:
+                    high = mid - 1
+            for i in range(out,low,-1):
+                self.__words[i]=self.__words[i-1]
+            self.__words[low]=temp
         t2 = time.process_time()
         return t2-t1
         
@@ -197,7 +198,7 @@ class Dictionary:
             print("File " + name + " does not exist!")
             sys.exit(0)
         for word in self.__words:
-            file.write(word)
+            file.write(word + "\n")
         file.close()
 
     def spell_check(self,filename):
@@ -268,15 +269,13 @@ class Dictionary:
             self.__words[imin]=self.__words[out]
             self.__words[out]=temp1
 
-    #How to proceed? Implement the method crack lock that returns a new dictionary containing all the possible words. In theory, we will need to consider to consider c = (nboption)nbletter locking combination options, search them in the sorted dictionary, and return all the words found. Since it can be quite complicated to generate all these locking combinations (without using recursion), you will be using instead a stochastic approach where your code will generate 6 ∗ c random locking combinations of letters (for example: 1st letter chosen at random among all its possible options, etc.). This technique may not be able to find all the acceptable words at the end but it generally works well if the number of random locking combinations is large enough. In addition, as soon as a word is found (after a successful binary search) you will insert it into a new dictionary *only* if it is not already present (to avoid duplicates if you get the same random locking combination). Hint: you may want to use the linear search method lsearch to search the new dictionary (which
     def crack_lock(self,lock):
         """Crack a lock"""
         newDict = Dictionary()
-        for i in range(6):
+        for i in range(6*(len(lock[0])**len(lock))):
             newWord = ""
             for j in range(len(lock)):
                 newWord += lock[j][random.randint(0,len(lock[j])-1)]
-            print(newWord)
             if self.bsearch(newWord):
                 if not newDict.lsearch(newWord):
                     newDict.insert(newWord)
